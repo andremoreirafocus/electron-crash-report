@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const uuid = require('uuid');
 const writeFile = require('write-file');
 const path = require('path');
@@ -9,7 +9,10 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
+
+// app.use(bodyParser.json());
+app.use(express.json());
 
 const crashesPath = path.join(__dirname, 'crashes');
 const exceptionsPath = path.join(__dirname, 'uncaughtexceptions');
@@ -37,6 +40,7 @@ app.post('/crashreports', upload, (request, response) => {
 
 app.post('/uncaughtexceptions', (request, response) => {
   const filePath = path.join(exceptionsPath, `${uuid()}.json`);
+  // console.log(request);
   const report = JSON.stringify({ ...request.body, date: new Date() });
 
   writeFile(filePath, report, error => {
